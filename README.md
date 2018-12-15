@@ -1,5 +1,5 @@
 # ImageViewer
-OpenGl based imageViewer and Editor..with opencv..
+Image~Viewer and Editor..Made with opencv and opengl
 
 
 ![image](https://user-images.githubusercontent.com/24197201/50038906-ce4c4780-0050-11e9-804f-645f2c705ce1.png)
