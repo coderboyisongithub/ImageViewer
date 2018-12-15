@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\ImGui">
+      <UniqueIdentifier>{45a6da3e-b8b2-4dd0-b099-dd09f1408e11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\OGL abstracts">
+      <UniqueIdentifier>{883a3c1f-6622-4d07-880d-741cfa35e11b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{210d7c66-52fd-4aba-a980-855dd36c5644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ImGui\Windows">
+      <UniqueIdentifier>{790484d8-609b-4354-858d-827e01cdb6cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Opencv">
+      <UniqueIdentifier>{3a6802f9-393d-4583-9d14-5d88f9a02907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ImGui\Windows\Widgets">
+      <UniqueIdentifier>{c897f911-2097-4005-bab5-22c60c0d7d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ImGui\Windows\imageViwer">
+      <UniqueIdentifier>{98971560-bc1a-402d-839a-23f8795d2d98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ImGui\Windows\Widgets\Digital_filters">
+      <UniqueIdentifier>{d76a7d0c-29a4-4dd7-ba7c-c8345da31d9e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\imGui\Imgui includes\imconfig.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\imGui\Imgui includes\imgui.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\imGui\Imgui includes\imgui_impl_glfw_gl3.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\imGui\Imgui includes\imgui_internal.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\imGui\Imgui includes\stb_rect_pack.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\imGui\Imgui includes\stb_textedit.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\imGui\Imgui includes\stb_truetype.h">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\OpenGL abstraction Layer\Index_Buffer.h">
+      <Filter>Resource Files\OGL abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\OpenGL abstraction Layer\Object2D.h">
+      <Filter>Resource Files\OGL abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\OpenGL abstraction Layer\shader_processor.h">
+      <Filter>Resource Files\OGL abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\OpenGL abstraction Layer\vertexbuffer.h">
+      <Filter>Resource Files\OGL abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="InputPannel.h">
+      <Filter>Resource Files\ImGui\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\area51\area51\DirectoryPhrasor.h">
+      <Filter>Resource Files\ImGui\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="LunchBox.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cvml.h">
+      <Filter>Resource Files\Opencv</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureProcessor.h">
+      <Filter>Resource Files\OGL abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mediaPool.h">
+      <Filter>Resource Files\ImGui\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget_SliderInput.h">
+      <Filter>Resource Files\ImGui\Windows\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Filters.h">
+      <Filter>Resource Files\Opencv</Filter>
+    </ClInclude>
+    <ClInclude Include="imgViweh.h">
+      <Filter>Resource Files\ImGui\Windows\imageViwer</Filter>
+    </ClInclude>
+    <ClInclude Include="DataMetric.h">
+      <Filter>Resource Files\ImGui\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget_Filter_Blur.h">
+      <Filter>Resource Files\ImGui\Windows\Widgets\Digital_filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget_Filter_Retro.h">
+      <Filter>Resource Files\ImGui\Windows\Widgets\Digital_filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Resource Files\ImGui\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Menubar.h">
+      <Filter>Resource Files\ImGui\Windows\imageViwer</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget_Filter_Sharp.h">
+      <Filter>Resource Files\ImGui\Windows\Widgets\Digital_filters</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\imGui\Imgui includes\imgui.cpp">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\imGui\Imgui includes\imgui_draw.cpp">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\imGui\Imgui includes\imgui_impl_glfw_gl3.cpp">
+      <Filter>Resource Files\ImGui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\OpenGL\OpenGL\shader\shader.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="image.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
