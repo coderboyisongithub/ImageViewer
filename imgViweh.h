@@ -6,6 +6,7 @@
 #include "Widget_Filter_Blur.h"
 #include "Widget_Filter_Retro.h"
 #include "Widget_Filter_Sharp.h"
+#include "Widget_Filter_PaintRed.h"
 #include <math.h>
 #include "Timer.h"
 
@@ -24,6 +25,7 @@ class imageViewer
 	Widget_UI_blur Blur;
 	Widget_UI_Retro Retro;
 	Widget_UI_Sharpness Sharp;
+	Widget_UI_paintRed Artify;
 	//window_Filters Filters;	
 	DataMetric metricAnalyzer;
 
@@ -37,9 +39,10 @@ class imageViewer
 	bool ready;
 	bool _flag_gpu_installation;
 	 
-	bool filter_optionBlur;
-	 bool filter_optionRetro;
-	 bool filter_optionSharp;
+		bool filter_optionBlur;
+		bool filter_optionRetro;
+		bool filter_optionSharp;
+		bool filter_optionartify;
 
 	bool flag_filter_blur,flag_filter_retro,flag_filter_sharp;
 	bool model_window_flag;
@@ -135,6 +138,9 @@ class imageViewer
 				
 				if(ImGui::Selectable("S",&filter_optionSharp,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(50,50)))
 					Sharp.setVisiblity(filter_optionSharp);
+				
+				if(ImGui::Selectable("Artify",&filter_optionartify,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(50,50)))
+					Artify.setVisiblity(filter_optionartify);
 				
 				ImGui::EndGroup();
 
@@ -424,6 +430,28 @@ ImGui::Image(imID,ImVec2(height*(diag*capture),width*(diag*capture)),ImVec2(0,0)
 				buff2GPU(clone_);
 				metricAnalyzer.uploadData(clone_,h,w,c); //uploading data for Insight..
 				}
+
+				}
+				if(Artify.isVisible())
+				{
+					
+					Artify.render();
+					if(Artify.hasintrrupted())
+					{
+						Artify.processWith(image,h,w,c);	
+						if(Artify.applyFilter())
+							{memcpy(image,Artify.getProcessed(),sizeof(unsigned char)*h*w*4);
+						}
+						else
+						{
+						memcpy(clone_,Artify.getProcessed(),sizeof(unsigned char)*h*w*4);
+						}
+						buff2GPU(clone_);
+						metricAnalyzer.uploadData(clone_,h,w,c); //uploading data for Insight..
+
+					}
+					else;
+				
 
 				}
 				
