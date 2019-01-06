@@ -5,13 +5,41 @@ Image~Viewer and Editor..Made with opencv and opengl
 ![image](https://user-images.githubusercontent.com/24197201/50038906-ce4c4780-0050-11e9-804f-645f2c705ce1.png)
 
 # Filters..
-<b>1.Artify</b>
+<b>Image Blur<b/>
+  
+  This applies gaussian blur over image.We are using 5x5 kernel to convolve through image..
+  
+  ![blur](https://user-images.githubusercontent.com/24197201/50737271-2f4de200-11ef-11e9-878d-65a2934b88ac.gif)
+
+  <b>Image Sharping</b>
+  
+  This filter apply edge enhancement over image,The algorithm is specially focused on <i>laplacian substraction</i> for this process...
+  
+  ![sharpness](https://user-images.githubusercontent.com/24197201/50737229-d1b99580-11ee-11e9-8a5f-68632df86b18.gif)
+  
+  <b>Retro</b>
+  
+This taste something like this..
+![retro](https://user-images.githubusercontent.com/24197201/50737398-d1ba9500-11f0-11e9-890e-e9349453aa81.gif)
+
+<b>Artify</b>
 
 User is allowed to select  size of kernel which is applied over image,Size of kernel decide effect over image
 Here is example showing filter artify..with other filters..
-![artify](https://user-images.githubusercontent.com/24197201/50725784-0106ce80-112b-11e9-98aa-c6491e832950.gif)
+
+![artify](https://user-images.githubusercontent.com/24197201/50737304-a84d3980-11ef-11e9-8cd9-496190b58ca0.gif)
 
 This filter is specially for image containing face.For best result,face must be flooded with light.Poor lighting over face will ruin the effect.
+
+# utility
+<b>Image histogram</b>
+
+I also provide a saperate metric window to calculate and display histogram of R,G and B channels of image saperately..
+It gets updated whenever we apply filter in real-time..User can see the change occured in saperate channels of image.
+
+![histogram](https://user-images.githubusercontent.com/24197201/50737484-f5320f80-11f1-11e9-8606-d58ec6f3e180.gif)
+
+
 # resource
 <b>We are using opengl,opencv,and imgui for developement of this application..
   System must setup with opencv and opengl</b>
