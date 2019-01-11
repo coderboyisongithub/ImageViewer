@@ -5,9 +5,9 @@ Image~Viewer and Editor.....
 ![image](https://user-images.githubusercontent.com/24197201/50038906-ce4c4780-0050-11e9-804f-645f2c705ce1.png)
 
 
-#Image Remix...
+# Image Remix... a very short introduction..
 
-![preset](https://user-images.githubusercontent.com/24197201/51023643-77825100-15af-11e9-873e-578df3b9931f.gif)
+![preset](https://user-images.githubusercontent.com/24197201/51024206-f6c45480-15b0-11e9-9e8f-78593c6384e4.gif)
 
 
 
