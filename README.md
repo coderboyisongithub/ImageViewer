@@ -1,11 +1,25 @@
 # ImageViewer
-Image~Viewer and Editor..Made with opencv and opengl
+Image~Viewer and Editor.....
 
-
+		
 ![image](https://user-images.githubusercontent.com/24197201/50038906-ce4c4780-0050-11e9-804f-645f2c705ce1.png)
 
+
+#Image Remix...
+
+![preset](https://user-images.githubusercontent.com/24197201/51023643-77825100-15af-11e9-873e-578df3b9931f.gif)
+
+
+
 # Filters..
-<b>Image Blur<b/>
+
+<b>Tesselator</b> <i>new</i>
+
+Apply triangular tesselation producing pixilate effect..Each kernel visits image,and breakdown into triangular implementation...
+
+![tesselator](https://user-images.githubusercontent.com/24197201/51022875-8b2cb800-15ad-11e9-9d26-f3e61da4a12d.gif)
+
+<b>Image Blur</b>
   
   This applies gaussian blur over image.We are using 5x5 kernel to convolve through image..
   
