@@ -7,6 +7,7 @@
 #include "Widget_Filter_Retro.h"
 #include "Widget_Filter_Sharp.h"
 #include "Widget_Filter_PaintRed.h"
+#include "Widget_Filter_Teselate.h"
 #include <math.h>
 #include "Timer.h"
 
@@ -26,6 +27,7 @@ class imageViewer
 	Widget_UI_Retro Retro;
 	Widget_UI_Sharpness Sharp;
 	Widget_UI_paintRed Artify;
+	Widget_UI_Tesselate Tesselate;
 	//window_Filters Filters;	
 	DataMetric metricAnalyzer;
 
@@ -43,8 +45,9 @@ class imageViewer
 		bool filter_optionRetro;
 		bool filter_optionSharp;
 		bool filter_optionartify;
+		bool filter_optionTesselate;
 
-	bool flag_filter_blur,flag_filter_retro,flag_filter_sharp;
+	bool flag_filter_blur,flag_filter_retro,flag_filter_sharp,flag_filter_tesselate;
 	bool model_window_flag;
 
 	int index;
@@ -141,6 +144,8 @@ class imageViewer
 				
 				if(ImGui::Selectable("Artify",&filter_optionartify,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(50,50)))
 					Artify.setVisiblity(filter_optionartify);
+				if(ImGui::Selectable("Tesselate",&filter_optionTesselate,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(50,50)))
+					Tesselate.setVisiblity(filter_optionTesselate);
 				
 				ImGui::EndGroup();
 
@@ -453,6 +458,37 @@ ImGui::Image(imID,ImVec2(height*(diag*capture),width*(diag*capture)),ImVec2(0,0)
 					else;
 				
 
+				}
+				if(Tesselate.isVisible())
+				{
+					Tesselate.render();
+					if(Tesselate.hasintrrupted())
+					{
+						
+
+						
+						Tesselate.processWith(image,h,w,c);
+						if(Tesselate.filterApply())
+						{
+							
+							uchar *memblock=Tesselate.getProcessed();
+							if(memblock!=NULL)
+							memcpy(image,Tesselate.getProcessed(),sizeof(unsigned char)*h*w*4);
+							else
+								;
+						}
+						else
+						{
+							uchar* memblock=Tesselate.getProcessed();
+							if(memblock!=NULL)
+								memcpy(clone_,memblock,sizeof(unsigned char)*h*w*4);
+							else
+								;
+
+						}
+						buff2GPU(clone_);
+						metricAnalyzer.uploadData(clone_,h,w,c); //uploading data for Insight..
+					}
 				}
 				
 				
