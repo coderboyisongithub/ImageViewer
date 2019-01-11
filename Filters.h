@@ -552,8 +552,294 @@ void _process()
 		}
 
 
+	
+	
 
 	};
+		
+		
+		/*
+
+			    __/\_____/\___
+			   /              \  Mr.Owl
+			  /  ___     ___   \
+			  |  \_/     \_/   |
+			  |	     ;f;       |
+			   \\            //
+			   / \ _______ /  \
+			  / 			   \
+			 //    \\\///      \\
+			///    ///\\\      \\\
+		   /////             \\\\\\
+		  ////////////\\\\\\\\\\\\\\
+		 ////////////  \\\\\\\\\\\\\\
+		/////////\\\\  /////\\\\\\\\\\
+	   ////////\\\\\\\////////\\\\\\\\\
+	  ///////   \\\\\\///////  \\\\\\\\\
+	 /////       \\\\\//////       \\\\\\
+	              {}      {}  
+			 }{{}}}{}}  {}}{}{{}{
+		  
+
+*/
+		
+		//Triangular Tesselator..Filter..
+	class Tesselate
+	{
+		unsigned char *image,*processed_image;
+		bool ready;
+		int tesselation_parameter;
+
+		int h,w,c;
+
+		void init_param()
+		{
+			image=processed_image=NULL;
+			bool ready=false;
+			tesselation_parameter=0;
+
+		}
+				inline void extract_decimal(float src,int &integeral,float &decimal)
+				{
+					int integer=(int)src;
+					decimal=src-(float)integer;
+					integeral=integer;
+				}
+				void kernel_operation(cv::Mat src,cv::Size patch_size,int loc_r,int loc_c,int value)
+				{
+		
+
+uchar max1=0;
+uchar max2=0;
+//	uchar min=300;
+
+int transition_point=loc_c;
+for(int row_anchor=loc_r;row_anchor<((loc_r)+patch_size.height);row_anchor++)
+{
+	for(int col_anchor=loc_c;col_anchor<((loc_c)+patch_size.width);col_anchor++)
+	{
+
+		if(col_anchor<transition_point)
+		{
+			if(src.at<uchar>(row_anchor,col_anchor)>max1)
+			{
+				max1=src.at<uchar>(row_anchor,col_anchor);
+			}
+			else;
+		}
+
+		else
+		{
+		if(src.at<uchar>(row_anchor,col_anchor)>max2)
+			{
+				max2=src.at<uchar>(row_anchor,col_anchor);
+			}
+			else;
+		}
+	}
+	transition_point++;
+
+}
+
+transition_point=loc_c;
+	for(int row_anchor=loc_r;row_anchor<((loc_r)+patch_size.height);row_anchor++)
+{
+	for(int col_anchor=loc_c;col_anchor<((loc_c)+patch_size.width);col_anchor++)
+	{
+
+			if(col_anchor<transition_point)
+			{
+
+					src.at<uchar>(row_anchor,col_anchor)=max1;
+
+			}
+
+			else
+			{
+
+
+					src.at<uchar>(row_anchor,col_anchor)=max2;
+
+
+			}
+	}
+
+
+	transition_point++;
+
+}
+
+				}
+				void iter(cv::Mat src,cv::Size patch,int value)
+				{
+					if(patch.area()==0)
+				return;
+					else ;
+	
+					cv::Size patch_size(patch);//orignal patch size iteration over matrix
+					float vertical_step=(float)src.rows/(float)patch_size.height;
+					float horizantal_step=(float)src.cols/(float)patch_size.width;
+					 int h_residual_pixles=src.cols-(horizantal_step*patch_size.width);
+					  int v_residual_pixles=src.rows-(horizantal_step*patch_size.height);
+	
+
+					 // printf("\nimage resolution:%dx%d pixles covered:%d pixles remaining:%d  steps:%d",src.rows,src.cols,(horizantal_step*patch_size.width),h_residual_pixles,horizantal_step);
+
+					  //determine weather to cover remaining region?
+					  //Horizantal part..
+					  int h_steps;float h_fraction;
+					  int v_steps;float v_fraction;
+					  extract_decimal(horizantal_step,h_steps,h_fraction);
+					  extract_decimal(vertical_step,v_steps,v_fraction);
+					  cv::Size fractional_patchsize;
+					  fractional_patchsize.width=(int)(((int)(h_fraction*100))*patch_size.width/100);
+					  fractional_patchsize.height=(int)(((int)(v_fraction*100))*patch_size.width/100);
+					  //printf("%d %d\n",fractional_patchsize.width,fractional_patchsize.height);
+
+					  //printf("\n%f %f",v_fraction,h_fraction);
+					  bool _cover_horizantal,_cover_vertical;
+					 if(v_fraction>0.0)
+						 {v_steps+=1;
+					 _cover_vertical=true;
+					 }
+					  else
+						  _cover_vertical=false;
+
+					  if(h_fraction>0.0)
+					{	  h_steps+=1;
+					  _cover_horizantal=true;
+					  }
+					  else
+					  {
+						  _cover_horizantal=false;
+					  }
+
+					  int anchor_row;
+					  for(anchor_row=0;anchor_row<=(v_steps-1);anchor_row++)
+					  {
+						  for(int anchor_col=0;anchor_col<=(h_steps-1);anchor_col++)
+						  {
+							  if(_cover_vertical==true || _cover_horizantal==true)
+							  {
+							  if(anchor_col==(h_steps-1) && anchor_row<(v_steps-1))
+							  {
+								  //calculate space for fitting>>?
+								  //calculating horizantal shift
+								  int remain_pixles_count=(int)(((h_fraction*100)*patch_size.width)/100);//number of pixles in fractional part..
+				  
+								  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
+
+								  int shift_pixle_count=patch_size.width-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
+
+
+     								  kernel_operation(src,patch_size,anchor_row*patch_size.height, ((anchor_col*patch_size.width)-shift_pixle_count) ,value);
+				  
+							  }
+							else if(anchor_row==(v_steps-1) && anchor_col<(h_steps-1))
+								  {
+									//calculate space for fitting>>?
+								  //calculating horizantal shift
+									  int remain_pixles_count=(int)(((v_fraction*100)*patch_size.height)/100);//number of pixles in fractional part..
+				  
+								  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
+
+								  int shift_pixle_count=patch_size.height-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
+
+				  
+								  kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count) , anchor_col*patch_size.width,value);
+				
+
+								  }
+							else if(anchor_row==(v_steps-1) && anchor_col==(h_steps-1))
+							{
+								 int remain_pixles_count_horizantal=(int)(((h_fraction*100)*patch_size.width)/100);
+									 int remain_pixles_count_vertical=(int)(((v_fraction*100)*patch_size.height)/100);
+
+									 int shift_pixle_count_horizantal=patch_size.width-remain_pixles_count_horizantal;
+									 int shift_pixle_count_vertical=patch_size.height-remain_pixles_count_vertical;
+
+									 kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count_vertical) , (anchor_col*patch_size.width-shift_pixle_count_horizantal),value);
+					 
+							}
+				  
+							  else
+								  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
+							  }
+							  else
+								  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
+						  }
+					  }
+	
+
+	
+				}
+	void _process()
+	{
+
+		if(processed_image!=NULL)
+		{
+			free(processed_image);
+				processed_image=NULL;
+		}
+
+		//cpy source memblock to processed image memblock..
+		//pre-allocating destenation memory block..
+		processed_image=(unsigned char*)malloc(sizeof(unsigned char)*h*w*4);
+
+		memcpy(processed_image,image,sizeof(unsigned char)*h*w*4);
+		if(tesselation_parameter==0)
+			return;
+		else;
+		cv::Mat tmp(h,w,CV_8UC4,processed_image);	
+		//splitting into seperate channels (R,G,B);
+
+		std::vector<cv::Mat>channels;
+		cv::split(tmp,channels);
+
+		for(int loop=0;loop<3;loop++)
+		{
+			iter(channels[loop],cv::Size(tesselation_parameter,tesselation_parameter),NULL);
+
+		}
+			cv::merge(channels,tmp);
+
+
+	}
+
+	public:
+		Tesselate()
+		{
+			init_param();
+
+
+		}
+		
+		void setimage(unsigned char *src,int height,int width,int channels)
+		{
+			image=src;
+			h=height;
+			w=width;
+			c=channels;
+
+			
+		}  
+unsigned char* getimage()
+		{
+return processed_image;
+		}
+		
+void setTesselationParam(int v0)
+{
+	tesselation_parameter=v0;
+}
+void process()
+{
+	_process();
+}
+
+
+	};
+		
 	}
 	namespace DataAbstractor
 	{
