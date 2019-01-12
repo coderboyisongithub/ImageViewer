@@ -262,7 +262,7 @@ cv::split(img,channel);
 
 cv::Mat laplace_r,laplace_b,laplace_g;
 
-//calculation of lapelace edge..
+//calculation of laplace edge..
 cv::Laplacian(channel[0],laplace_r,0);
 cv::Laplacian(channel[1],laplace_g,0);
 cv::Laplacian(channel[2],laplace_b,0);
@@ -714,62 +714,62 @@ transition_point=loc_c;
 						  _cover_horizantal=false;
 					  }
 
-					  int anchor_row;
-					  for(anchor_row=0;anchor_row<=(v_steps-1);anchor_row++)
-					  {
-						  for(int anchor_col=0;anchor_col<=(h_steps-1);anchor_col++)
-						  {
-							  if(_cover_vertical==true || _cover_horizantal==true)
-							  {
-							  if(anchor_col==(h_steps-1) && anchor_row<(v_steps-1))
-							  {
-								  //calculate space for fitting>>?
-								  //calculating horizantal shift
-								  int remain_pixles_count=(int)(((h_fraction*100)*patch_size.width)/100);//number of pixles in fractional part..
-				  
-								  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
+int anchor_row;
+for(anchor_row=0;anchor_row<=(v_steps-1);anchor_row++)
+{
+for(int anchor_col=0;anchor_col<=(h_steps-1);anchor_col++)
+{
+if(_cover_vertical==true || _cover_horizantal==true)
+{
+if(anchor_col==(h_steps-1) && anchor_row<(v_steps-1))
+{
+  //calculate space for fitting>>?
+  //calculating horizantal shift
+  int remain_pixles_count=(int)(((h_fraction*100)*patch_size.width)/100);//number of pixles in fractional part..
 
-								  int shift_pixle_count=patch_size.width-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
+  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
+
+  int shift_pixle_count=patch_size.width-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
 
 
-     								  kernel_operation(src,patch_size,anchor_row*patch_size.height, ((anchor_col*patch_size.width)-shift_pixle_count) ,value);
-				  
-							  }
-							else if(anchor_row==(v_steps-1) && anchor_col<(h_steps-1))
-								  {
-									//calculate space for fitting>>?
-								  //calculating horizantal shift
-									  int remain_pixles_count=(int)(((v_fraction*100)*patch_size.height)/100);//number of pixles in fractional part..
-				  
-								  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
+  kernel_operation(src,patch_size,anchor_row*patch_size.height, ((anchor_col*patch_size.width)-shift_pixle_count) ,value);
 
-								  int shift_pixle_count=patch_size.height-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
+}
+else if(anchor_row==(v_steps-1) && anchor_col<(h_steps-1))
+  {
+	//calculate space for fitting>>?
+  //calculating horizantal shift
+	  int remain_pixles_count=(int)(((v_fraction*100)*patch_size.height)/100);//number of pixles in fractional part..
 
-				  
-								  kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count) , anchor_col*patch_size.width,value);
-				
+  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
 
-								  }
-							else if(anchor_row==(v_steps-1) && anchor_col==(h_steps-1))
-							{
-								 int remain_pixles_count_horizantal=(int)(((h_fraction*100)*patch_size.width)/100);
-									 int remain_pixles_count_vertical=(int)(((v_fraction*100)*patch_size.height)/100);
+  int shift_pixle_count=patch_size.height-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
 
-									 int shift_pixle_count_horizantal=patch_size.width-remain_pixles_count_horizantal;
-									 int shift_pixle_count_vertical=patch_size.height-remain_pixles_count_vertical;
 
-									 kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count_vertical) , (anchor_col*patch_size.width-shift_pixle_count_horizantal),value);
-					 
-							}
-				  
-							  else
-								  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
-							  }
-							  else
-								  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
-						  }
-					  }
-	
+  kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count) , anchor_col*patch_size.width,value);
+
+
+  }
+else if(anchor_row==(v_steps-1) && anchor_col==(h_steps-1))
+{
+ int remain_pixles_count_horizantal=(int)(((h_fraction*100)*patch_size.width)/100);
+	 int remain_pixles_count_vertical=(int)(((v_fraction*100)*patch_size.height)/100);
+
+	 int shift_pixle_count_horizantal=patch_size.width-remain_pixles_count_horizantal;
+	 int shift_pixle_count_vertical=patch_size.height-remain_pixles_count_vertical;
+
+	 kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count_vertical) , (anchor_col*patch_size.width-shift_pixle_count_horizantal),value);
+
+}
+
+else
+  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
+}
+else
+  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
+}
+}
+
 
 	
 				}
@@ -894,12 +894,7 @@ const float *range={hrange};
 	}
 	return arr; //return R-G-B array..
 }
-//histogram of  oriented gradients...
-void HOG()
-{
 
-
-}
 
 	}
 };
