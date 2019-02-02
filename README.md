@@ -54,6 +54,15 @@ It gets updated whenever we apply filter in real-time..User can see the change o
 
 ![histogram](https://user-images.githubusercontent.com/24197201/50737484-f5320f80-11f1-11e9-8606-d58ec6f3e180.gif)
 
+# gallery
+<b>1.The Sherlock</b>
+
+
+![image](https://user-images.githubusercontent.com/24197201/52168774-55b35e80-2756-11e9-8e3e-6e2788e153bd.png)
+
+
+![image](https://user-images.githubusercontent.com/24197201/52168759-269ced00-2756-11e9-817a-64e74810b465.png)
+
 
 # resource
 <b>We are using opengl,opencv,and imgui for developement of this application..
