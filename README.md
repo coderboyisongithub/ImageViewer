@@ -40,7 +40,7 @@ This taste something like this..
 <b>Artify</b>
 
 User is allowed to select  size of kernel which is applied over image,Size of kernel decide effect over image
-Here is example showing filter artify..with other filters..
+Here is example showing filter artify...
 
 ![artify](https://user-images.githubusercontent.com/24197201/50737304-a84d3980-11ef-11e9-8cd9-496190b58ca0.gif)
 
