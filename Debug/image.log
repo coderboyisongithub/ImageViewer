@@ -1,0 +1,19 @@
+﻿Build started 31-08-2018 17:26:00.
+     1>Project "C:\Users\Overclock\Documents\Visual Studio 2012\Projects\image\image\image.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"E:\glfw-3.2.1\include" /I"E:\glew-2.1.0\include\GL" /IE:\glm\glm /IC:\opencv\build\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_NO_SECURE_WARNING /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\image.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"E:\glfw-3.2.1\include" /I"E:\glew-2.1.0\include\GL" /IE:\glm\glm /IC:\opencv\build\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_NO_SECURE_WARNING /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\image.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt "E:\imGui\Imgui includes\imgui.cpp" "E:\imGui\Imgui includes\imgui_draw.cpp" "E:\imGui\Imgui includes\imgui_impl_glfw_gl3.cpp" source.cpp
+         source.cpp
+     1>c:\users\overclock\documents\visual studio 2012\projects\image\image\lunchbox.h(20): fatal error C1083: Cannot open include file: 'glm.hpp': No such file or directory
+         imgui_impl_glfw_gl3.cpp
+     1>e:\imgui\imgui includes\imgui_impl_glfw_gl3.cpp(372): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\string.h(110) : see declaration of 'strcpy'
+         imgui_draw.cpp
+         imgui.cpp
+         Generating Code...
+     1>Done Building Project "C:\Users\Overclock\Documents\Visual Studio 2012\Projects\image\image\image.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:05.01

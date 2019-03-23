@@ -8,9 +8,28 @@
 #include "Widget_Filter_Sharp.h"
 #include "Widget_Filter_PaintRed.h"
 #include "Widget_Filter_Teselate.h"
+#include "Notifications.h"
 #include <math.h>
+#include "error_msg.h"
 #include "Timer.h"
+/*                         ...-+...+--
+                          .=+.+.
+                /\     .+.+..-
+             ////\\\\-------
+		   //////\\\\\\-----
+         ////////\\\\\\\\  |
+	   //////////\\\\\\\\\\
+     ////////////\\\\\\\\\\\\
+     [][][][][][][][][][][][]
+	 [][][][][][][][][][][][]
+	 [][][][]|	   |[]+  +[]]
+	 [][][][]|	   |[]+  +[]]
+	 [][][][]|	  o|[[][][][]
+	 [][][][]|	   |[[][][][]
+	 [][][][]|_____|[[][][][]
+	 -----------------------
 
+*/
 
 class imageViewer
 {
@@ -21,6 +40,7 @@ class imageViewer
 	LIST_LINKED picture_list;
 	unsigned int GPU_texture;
 	unsigned char* buffer[3];
+	int pl_size;			//picture list size;
 	
 	//Image Processors..
 	Widget_UI_blur Blur;
@@ -30,7 +50,7 @@ class imageViewer
 	Widget_UI_Tesselate Tesselate;
 	//window_Filters Filters;	
 	DataMetric metricAnalyzer;
-
+	Notification_Manager notifications;
 	
 	//##
 	Timer navigation_button;
@@ -50,7 +70,7 @@ class imageViewer
 	bool flag_filter_blur,flag_filter_retro,flag_filter_sharp,flag_filter_tesselate;
 	bool model_window_flag;
 
-	int index;
+	int index;	//index of picture list
 	int w,h,c;
 	float img_alpha;
 
@@ -98,23 +118,45 @@ class imageViewer
 		payload *p=(payload*)base->payload;
 
 		//printf("\n\nindex:%d  requested nodes:%x",index,picture_list.get_Node(index));
+
+		//Bitmap loading segment...
+
 			stbi_set_flip_vertically_on_load(0);
 			image=stbi_load(p->str,&w,&h,&c,4);
+		
 			int count=0;
-	
-
-			printf("\nImage loaded height:%d width:%d channels:%d size:%d*%d blocks " ,h,w,c,sizeof(unsigned char),w*h*c);
-			metricAnalyzer.uploadData(image,h,w,c);
-			clone_=(unsigned char*)malloc(sizeof(unsigned char)*w*h*4);
-			memcpy(clone_,image,sizeof(unsigned char)*w*h*4);
+	///////////////////////////////////////////////
 
 			if(image)
 			{
-				buff2GPU(); //upload to GPU slot
+			printf("\nImage loaded height:%d width:%d channels:%d size:%d*%d blocks " ,h,w,c,sizeof(unsigned char),w*h*c);
+			
+			metricAnalyzer.uploadData(image,h,w,c,true);
+			
+			clone_=(unsigned char*)malloc(sizeof(unsigned char)*w*h*4);
+			memcpy(clone_,image,sizeof(unsigned char)*w*h*4);
+			
+			buff2GPU(); //upload to GPU slot
 			
 			}
-			else;
 			
+			else
+
+			{
+				 char *buff_=(char*)malloc(sizeof(char)*1024);
+				sprintf(buff_,"imageViewer:loading failed::Cant read image due to undefined problems \n source:%s",p->str);
+				err_(buff_,MsgType::WARN);
+				if(count<picture_list.getsize())
+				{
+					err_("shifting next img buffer",MsgType::INFO);
+
+					index++;
+					loadBuffer(index);
+
+				}
+				else;
+
+			}
 		}
 		
 
@@ -129,22 +171,23 @@ class imageViewer
 	void Filter_Window()
 	{
 			
+		float s_width=50,s_height=80;
 		ImGui::Begin("Filters",&open);
 
 			ImGui::PushStyleColor(ImGuiCol_FrameBg,ImVec4(0.2,0.2,0.2,0.2));
 		ImGui::BeginGroup();
-				if(ImGui::Selectable("B",&filter_optionBlur,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(50,50)))
+				if(ImGui::Selectable("B",&filter_optionBlur,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(s_height,s_width)))
 				Blur.setVisiblity(filter_optionBlur);
 
-				if(ImGui::Selectable("R",&filter_optionRetro,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(50,50)))
+				if(ImGui::Selectable("R",&filter_optionRetro,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(s_height,s_width)))
 				Retro.setVisiblity(filter_optionRetro);
 				
-				if(ImGui::Selectable("S",&filter_optionSharp,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(50,50)))
+				if(ImGui::Selectable("S",&filter_optionSharp,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(s_height,s_width)))
 					Sharp.setVisiblity(filter_optionSharp);
 				
-				if(ImGui::Selectable("Artify",&filter_optionartify,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(50,50)))
+				if(ImGui::Selectable("Artify",&filter_optionartify,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(s_height,s_width)))
 					Artify.setVisiblity(filter_optionartify);
-				if(ImGui::Selectable("Tesselate",&filter_optionTesselate,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(50,50)))
+				if(ImGui::Selectable("Tesselate",&filter_optionTesselate,ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowDoubleClick,ImVec2(s_height,s_width)))
 					Tesselate.setVisiblity(filter_optionTesselate);
 				
 				ImGui::EndGroup();
@@ -170,6 +213,7 @@ class imageViewer
 		 filter_optionBlur=false;
 		filter_optionRetro=false;
 		filter_optionSharp=false;
+		
 	}
 public:
 	imageViewer()
@@ -198,9 +242,13 @@ public:
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive,ImVec4(0.2,0.2,0.2,0.8));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered,ImVec4(0.1,0.1,0.1,0.8));
 		
+		notifications.render();
+
 		if(ready)
 		{
+			
 			ImGui::Begin(wname,&open,ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar);
+			
 		ImGui::BeginGroup();
 		ImGuiID id=ImGui::GetCurrentWindow()->GetID(wname,NULL);
 		
@@ -270,9 +318,17 @@ static bool insight_ =true;
 	ImGui::BeginGroup();
 	if(ImGui::Button("<",ImVec2(nav_button_Scalef*100,nav_button_Scalef*100)))
 		{
+			if(index==0)
+			{
+				notifications.pushNotification("No Image"); 
+			}
+			else
+			{
 			index--;
 			loadBuffer(index);
+			//notifications.pushNotification("prev image");
 			img_alpha=0.0;
+			}
 		}
 		else;
 		ImGui::SameLine();
@@ -280,9 +336,15 @@ static bool insight_ =true;
 		
 		if(ImGui::Button(">",ImVec2(nav_button_Scalef*100,nav_button_Scalef*100)))
 		{
+			if(index==pl_size)
+			{notifications.pushNotification("No more Image.. :-(");}
+
+			else
+			{
 			index++;
 			loadBuffer(index);
 			img_alpha=0.0;
+			}
 		}
 		else;
 		ImGui::EndGroup();
@@ -311,7 +373,7 @@ static bool insight_ =true;
 		//stbi_image_free(image);
 
 	ImTextureID imID=(void*)GPU_texture;
-float aspect_ratio=.1/0.1;
+float aspect_ratio=0.1/0.1;
 //float diag=getDiagonal(ImGui::GetCurrentWindow()->Size.x,ImGui::GetCurrentWindow()->Size.y);
 float diag=getDiagonal(ImGui::GetCurrentWindow()->Size.y,ImGui::GetCurrentWindow()->Size.x);
 float capture=0.40; //cover area of image(%)
@@ -356,6 +418,10 @@ ImGui::Image(imID,ImVec2(height*(diag*capture),width*(diag*capture)),ImVec2(0,0)
 
 			if(image!=NULL)
 			{
+				ImageProcessor::Filters::ChannelMixer ch;
+
+				ch.setImage(image,h,w,c);
+
 					if(sel)
 			Filter_Window();
 	          else ;
@@ -419,6 +485,8 @@ ImGui::Image(imID,ImVec2(height*(diag*capture),width*(diag*capture)),ImVec2(0,0)
 				}
 				if(Sharp.isVisible())
 				{
+					
+					
 					Sharp.render();
 				if(Sharp.hasintrrupted())
 				{
@@ -507,7 +575,11 @@ ImGui::Image(imID,ImVec2(height*(diag*capture),width*(diag*capture)),ImVec2(0,0)
 		}
 	
 		else
+		{
+			printf("\nImageViewer::system not ready..:(");
+
 			abort(); //program NOT ready..
+			}
 		
 	}
 
@@ -527,6 +599,7 @@ ImGui::Image(imID,ImVec2(height*(diag*capture),width*(diag*capture)),ImVec2(0,0)
 			src_upld_list.copyTo(picture_list);
 			index=0;
 		loadBuffer(index);
+		pl_size=picture_list.getsize();
 		return true;
 		}
 

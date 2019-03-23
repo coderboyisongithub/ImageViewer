@@ -24,7 +24,7 @@ class Widget_UI_Sharpness
 public:
 	Widget_UI_Sharpness()
 	{
-			min=0.0; max=5.0;
+			min=0; max=5.0;
 			visible=false;
 			intrrupt=false;
 			ui_pannel=Widget::SliderInput_float(" ","Sharpness",0.0,5.0,"%0.5f");

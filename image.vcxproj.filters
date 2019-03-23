@@ -132,6 +132,27 @@
     <ClInclude Include="Widget_Filter_Sharp.h">
       <Filter>Resource Files\ImGui\Windows\Widgets\Digital_filters</Filter>
     </ClInclude>
+    <ClInclude Include="Widget_Filter_PaintRed.h">
+      <Filter>Resource Files\ImGui\Windows\Widgets\Digital_filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget_Filter_Teselate.h">
+      <Filter>Resource Files\ImGui\Windows\Widgets\Digital_filters</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferContainer.h">
+      <Filter>Resource Files\Opencv</Filter>
+    </ClInclude>
+    <ClInclude Include="faceMash.h">
+      <Filter>Resource Files\Opencv</Filter>
+    </ClInclude>
+    <ClInclude Include="error_msg.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Notifications.h">
+      <Filter>Resource Files\ImGui\Windows\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="windowContext.h">
+      <Filter>Resource Files\ImGui\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -156,6 +177,7 @@
     </None>
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="image.rc">

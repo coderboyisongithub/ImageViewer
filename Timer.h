@@ -10,6 +10,18 @@ class Timer
 
 	//timer flag;
 	bool flag_active;
+	void calculate_time()
+	{
+		if(second_passed==second_start)
+	{
+		second_start=ImGui::GetTime();second_passed+=0.00000001;
+	}
+	else
+	{
+		second_passed=ImGui::GetTime()-second_start;
+	}
+
+	}
 public:
 	Timer()
 	{
@@ -22,26 +34,31 @@ public:
 	void startTimer()
 	{
 	
-	if(second_passed==second_start)
-	{
-		second_start=ImGui::GetTime();second_passed+=0.00000001;
-	}
-	else
-	{
-		second_passed=ImGui::GetTime()-second_start;
-	}
-
+		flag_active=true;
+		calculate_time();
 	}
 	void reset()
 	{
 		second_passed=0.0;
 		second_start=reset_point;
+		flag_active=false;
 
 	}
 
+	bool isActive()
+	{
+		return flag_active;
+	}
 	float getTicks()
 	{
-		return second_passed;
+	
+		if(flag_active)
+		{
+			calculate_time();
+			return second_passed;
+		}
+		else
+			return 0.0f;
 	}
 };
 #endif

@@ -144,7 +144,7 @@ void render()
 		LIST_LINKED list;
 	if(strcmp(oldText,D)!=0) //if new request 
 	{
-		printf("\nnew request");
+	//	printf("\nnew request");
 		strcpy((char*)oldText,D); 
 		Turtle.setDir(std::string(D));
 		if(Turtle.wasRequestValid())
@@ -195,7 +195,7 @@ void getList(LIST_LINKED &tmp)
 	while(!Turtle.stack.isEmpty())
 		{
 			//printf("\n(before insertion )list()->node pointer:%x list->self pointer:%x",tmp.list,tmp.list->my);
-			printf("\nheader node:%x self pointer:%x",tmp.list,tmp.list->my);
+			//printf("\nheader node:%x self pointer:%x",tmp.list,tmp.list->my);
 			tmp.insert(Turtle.stack.pop());
 			//printf("\nTURTLE::list:size:%d",tmp.getsize());
 			//printf("\n(after insertion)list()->node pointer:%x list->self pointer:%x",tmp.list,tmp.list->my);

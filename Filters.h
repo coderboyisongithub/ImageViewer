@@ -3,7 +3,28 @@
 
 #include <opencv2\opencv.hpp>
 #include <iostream>
+#include "BufferContainer.h"
 #include <omp.h>
+
+
+
+/*
+				  (food!)
+			-||-           -||-
+            -||            -||-                          
+            -\\   ((  ))  -//-
+			 -\\ // 01 \\-//-
+			    |0  1  0| -
+                \0101010/- 
+          =======|01010|=======
+				/0101001\-
+           -//-|101000100|-\\-
+          -//- \\\\01////- -\\-
+         -||-      \/       -||-
+         -||-               -||-
+
+
+*/
 
 namespace ImageProcessor
 {
@@ -135,7 +156,6 @@ void enableMultiProcessing(bool descesion)
 }
 
 	};
-		
 	class Retro
 	{
 		unsigned char *image,*processed_image;
@@ -225,12 +245,9 @@ cv::merge(channel,raw_image);
 	}
 	};
 
-
-	//#sharpness filter...
-
-
 	class Sharp
 	{
+		
 		unsigned char *image,*processed_image;
 		int w,h,c;
 		//flags.
@@ -262,10 +279,12 @@ cv::split(img,channel);
 
 cv::Mat laplace_r,laplace_b,laplace_g;
 
-//calculation of laplace edge..
+
+//calculation of lapelace edge..
 cv::Laplacian(channel[0],laplace_r,0);
 cv::Laplacian(channel[1],laplace_g,0);
 cv::Laplacian(channel[2],laplace_b,0);
+
 
 //edge enhance...
 ///////////////////////
@@ -276,9 +295,9 @@ laplace_g*=sharpness;//
 
 //Image substraction...
 
-channel[0]-=laplace_r;
-channel[1]-=laplace_g;
-channel[2]-=laplace_b;
+channel[0]+=laplace_r;
+channel[1]+=laplace_g;
+channel[2]+=laplace_b;
 
 cv::merge(channel,img);
 
@@ -302,8 +321,6 @@ cv::merge(channel,img);
 
 	void process()
 	{
-		
-
 		_process();
 	}
 	float getSharpnessParameter()
@@ -320,12 +337,9 @@ void setSharpnessParameter(float _sharpness)
 {
 	sharpness=_sharpness;
 }
-		
 	};
 
-		
-class Paint_Red //Artify filter implementation..
-	
+class Paint_Red //artify..
 	{
 		unsigned char *image,*processed_image;
 		int h,w,c;
@@ -396,6 +410,27 @@ void kernel_operation(cv::Mat src,cv::Size patch_size,int loc_r,int loc_c,int va
 	}
 	
 }
+
+
+/*
+				  (food!)
+			-||-           -||-
+            -||            -||-                          
+            -\\   ((  ))  -//-
+			 -\\ // 01 \\-//-     
+			    |0  1  0| -       
+                \0101010/- 
+          =======|01010|=======
+				/0101001\-
+           -//-|101000100|-\\-
+          -//- \\\\01////- -\\-
+         -||-      \/       -||-
+         -||-               -||-
+
+
+*/
+
+
 void iter(cv::Mat src,cv::Size patch,int value)
 {
 	if(patch.area()==0)
@@ -552,38 +587,9 @@ void _process()
 		}
 
 
-	
-	
 
 	};
-		
-		
-		/*
 
-			    __/\_____/\___
-			   /              \  Mr.Owl
-			  /  ___     ___   \
-			  |  \_/     \_/   |
-			  |	     ;f;       |
-			   \\            //
-			   / \ _______ /  \
-			  / 			   \
-			 //    \\\///      \\
-			///    ///\\\      \\\
-		   /////             \\\\\\
-		  ////////////\\\\\\\\\\\\\\
-		 ////////////  \\\\\\\\\\\\\\
-		/////////\\\\  /////\\\\\\\\\\
-	   ////////\\\\\\\////////\\\\\\\\\
-	  ///////   \\\\\\///////  \\\\\\\\\
-	 /////       \\\\\//////       \\\\\\
-	              {}      {}  
-			 }{{}}}{}}  {}}{}{{}{
-		  
-
-*/
-		
-		//Triangular Tesselator..Filter..
 	class Tesselate
 	{
 		unsigned char *image,*processed_image;
@@ -608,67 +614,97 @@ void _process()
 				void kernel_operation(cv::Mat src,cv::Size patch_size,int loc_r,int loc_c,int value)
 				{
 		
+					/*cv::Mat clone;
+					src.copyTo(clone);
+					cv::rectangle(clone,cv::Rect(loc_c,loc_r,patch_size.width,patch_size.height),cv::Scalar(1,1,1),2);
+					cv::imshow("clone",clone);
+					cv::waitKey(0);
+				*/
+					uchar max1=0;
+					uchar max2=0;
+				//	uchar min=300;
 
-uchar max1=0;
-uchar max2=0;
-//	uchar min=300;
+					int transition_point=loc_c;
+					for(int row_anchor=loc_r;row_anchor<((loc_r)+patch_size.height);row_anchor++)
+					{
+						for(int col_anchor=loc_c;col_anchor<((loc_c)+patch_size.width);col_anchor++)
+						{
+			
+							if(col_anchor<transition_point)
+							{
+								if(src.at<uchar>(row_anchor,col_anchor)>max1)
+								{
+									max1=src.at<uchar>(row_anchor,col_anchor);
+								}
+								else;
+							}
 
-int transition_point=loc_c;
-for(int row_anchor=loc_r;row_anchor<((loc_r)+patch_size.height);row_anchor++)
-{
-	for(int col_anchor=loc_c;col_anchor<((loc_c)+patch_size.width);col_anchor++)
-	{
+							else
+							{
+							if(src.at<uchar>(row_anchor,col_anchor)>max2)
+								{
+									max2=src.at<uchar>(row_anchor,col_anchor);
+								}
+								else;
+							}
+						}
+						transition_point++;
+		
+					}
 
-		if(col_anchor<transition_point)
-		{
-			if(src.at<uchar>(row_anchor,col_anchor)>max1)
-			{
-				max1=src.at<uchar>(row_anchor,col_anchor);
-			}
-			else;
-		}
+					transition_point=loc_c;
+						for(int row_anchor=loc_r;row_anchor<((loc_r)+patch_size.height);row_anchor++)
+					{
+						for(int col_anchor=loc_c;col_anchor<((loc_c)+patch_size.width);col_anchor++)
+						{
+			
+								if(col_anchor<transition_point)
+								{
+				
+										src.at<uchar>(row_anchor,col_anchor)=max1;
+				
+								}
 
-		else
-		{
-		if(src.at<uchar>(row_anchor,col_anchor)>max2)
-			{
-				max2=src.at<uchar>(row_anchor,col_anchor);
-			}
-			else;
-		}
-	}
-	transition_point++;
-
-}
-
-transition_point=loc_c;
-	for(int row_anchor=loc_r;row_anchor<((loc_r)+patch_size.height);row_anchor++)
-{
-	for(int col_anchor=loc_c;col_anchor<((loc_c)+patch_size.width);col_anchor++)
-	{
-
-			if(col_anchor<transition_point)
-			{
-
-					src.at<uchar>(row_anchor,col_anchor)=max1;
-
-			}
-
-			else
-			{
-
-
-					src.at<uchar>(row_anchor,col_anchor)=max2;
-
-
-			}
-	}
+								else
+								{
+			
+			
+										src.at<uchar>(row_anchor,col_anchor)=max2;
+		
+			
+								}
+						}
 
 
-	transition_point++;
+						transition_point++;
+		
+					}
+	
+				/*	//pixle over-write.
+					for(int row_anchor=loc_r;row_anchor<((loc_r)+patch_size.height);row_anchor++)
+					{
 
-}
+						if(row_anchor>src.rows)
+							break;
+						else;
+						for(int col_anchor=loc_c;col_anchor<((loc_c)+patch_size.width);col_anchor++)
+						{
+							if(col_anchor>src.cols)
+								break;
+							else;
+							//if(src.at<uchar>(row_anchor,col_anchor)>=(uchar)value)
+								src.at<uchar>(row_anchor,col_anchor)=max;
+				//			else
+								src.at<uchar>(row_anchor,col_anchor)=(uchar)0;
+			
+			
+			
+			
+						}
 
+	
+					}
+					*/
 				}
 				void iter(cv::Mat src,cv::Size patch,int value)
 				{
@@ -714,62 +750,62 @@ transition_point=loc_c;
 						  _cover_horizantal=false;
 					  }
 
-int anchor_row;
-for(anchor_row=0;anchor_row<=(v_steps-1);anchor_row++)
-{
-for(int anchor_col=0;anchor_col<=(h_steps-1);anchor_col++)
-{
-if(_cover_vertical==true || _cover_horizantal==true)
-{
-if(anchor_col==(h_steps-1) && anchor_row<(v_steps-1))
-{
-  //calculate space for fitting>>?
-  //calculating horizantal shift
-  int remain_pixles_count=(int)(((h_fraction*100)*patch_size.width)/100);//number of pixles in fractional part..
+					  int anchor_row;
+					  for(anchor_row=0;anchor_row<=(v_steps-1);anchor_row++)
+					  {
+						  for(int anchor_col=0;anchor_col<=(h_steps-1);anchor_col++)
+						  {
+							  if(_cover_vertical==true || _cover_horizantal==true)
+							  {
+							  if(anchor_col==(h_steps-1) && anchor_row<(v_steps-1))
+							  {
+								  //calculate space for fitting>>?
+								  //calculating horizantal shift
+								  int remain_pixles_count=(int)(((h_fraction*100)*patch_size.width)/100);//number of pixles in fractional part..
+				  
+								  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
 
-  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
-
-  int shift_pixle_count=patch_size.width-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
-
-
-  kernel_operation(src,patch_size,anchor_row*patch_size.height, ((anchor_col*patch_size.width)-shift_pixle_count) ,value);
-
-}
-else if(anchor_row==(v_steps-1) && anchor_col<(h_steps-1))
-  {
-	//calculate space for fitting>>?
-  //calculating horizantal shift
-	  int remain_pixles_count=(int)(((v_fraction*100)*patch_size.height)/100);//number of pixles in fractional part..
-
-  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
-
-  int shift_pixle_count=patch_size.height-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
+								  int shift_pixle_count=patch_size.width-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
 
 
-  kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count) , anchor_col*patch_size.width,value);
+     								  kernel_operation(src,patch_size,anchor_row*patch_size.height, ((anchor_col*patch_size.width)-shift_pixle_count) ,value);
+				  
+							  }
+							else if(anchor_row==(v_steps-1) && anchor_col<(h_steps-1))
+								  {
+									//calculate space for fitting>>?
+								  //calculating horizantal shift
+									  int remain_pixles_count=(int)(((v_fraction*100)*patch_size.height)/100);//number of pixles in fractional part..
+				  
+								  //to calculate adjustment we do patch_size.width-fractional_part=part_outside_bound..
 
+								  int shift_pixle_count=patch_size.height-remain_pixles_count;//number of pixles needed to step back the patch,to include fractional part of image
 
-  }
-else if(anchor_row==(v_steps-1) && anchor_col==(h_steps-1))
-{
- int remain_pixles_count_horizantal=(int)(((h_fraction*100)*patch_size.width)/100);
-	 int remain_pixles_count_vertical=(int)(((v_fraction*100)*patch_size.height)/100);
+				  
+								  kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count) , anchor_col*patch_size.width,value);
+				
 
-	 int shift_pixle_count_horizantal=patch_size.width-remain_pixles_count_horizantal;
-	 int shift_pixle_count_vertical=patch_size.height-remain_pixles_count_vertical;
+								  }
+							else if(anchor_row==(v_steps-1) && anchor_col==(h_steps-1))
+							{
+								 int remain_pixles_count_horizantal=(int)(((h_fraction*100)*patch_size.width)/100);
+									 int remain_pixles_count_vertical=(int)(((v_fraction*100)*patch_size.height)/100);
 
-	 kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count_vertical) , (anchor_col*patch_size.width-shift_pixle_count_horizantal),value);
+									 int shift_pixle_count_horizantal=patch_size.width-remain_pixles_count_horizantal;
+									 int shift_pixle_count_vertical=patch_size.height-remain_pixles_count_vertical;
 
-}
-
-else
-  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
-}
-else
-  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
-}
-}
-
+									 kernel_operation(src,patch_size, (anchor_row*patch_size.height-shift_pixle_count_vertical) , (anchor_col*patch_size.width-shift_pixle_count_horizantal),value);
+					 
+							}
+				  
+							  else
+								  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
+							  }
+							  else
+								  kernel_operation(src,patch_size,anchor_row*patch_size.height,anchor_col*patch_size.width,value);
+						  }
+					  }
+	
 
 	
 				}
@@ -839,61 +875,116 @@ void process()
 
 
 	};
-		
+
+	class ChannelMixer
+	{
+		BufferContainer::imageContainer bucket; //structure containing image and its variables..binded
+		void init_param()
+		{
+			bucket.image=NULL;
+			bucket.processed_image=NULL;
+			bucket.h=bucket.w=bucket.c=0;
+		}
+	public:
+		ChannelMixer()
+		{
+			
+		}
+		void setImage(unsigned char *src,int h,int w ,int c)
+		{
+			bucket.setParamsWith(src,src,h,w,(c+1));
+		}
+		void setImage(BufferContainer::imageContainer src)
+		{
+			bucket.setParams(src);
+		}
+
+	};
 	}
 	namespace DataAbstractor
 	{
 		
 //image histogram..
-float* histogram(unsigned char *image,int h,int w)
-{
-	
-cv::Mat src(w,h,CV_8UC4,image);
-int histSize=255;
-float hrange[]={0,255};
-const float *range={hrange};
-
-	cv::Mat histg,histb,histr;
-	
-	std::vector<cv::Mat>channel;
-
-	split(src,channel); //splitting image into RBG planes;
-	//calculating histogram for each plane...
-	
-	cv::calcHist( &channel[0], 1, 0, cv::Mat(),histr, 1, &histSize,&range, true,false);
-	cv::calcHist( &channel[1], 1, 0, cv::Mat(),histb, 1, &histSize,&range, true,false);
-	cv::calcHist( &channel[2], 1, 0, cv::Mat(),histg, 1, &histSize,&range, true,false);
-
-	int hist_w=512,hist_h=500;
-	int hist_buckets=cvRound((double)(hist_w/histSize));//scaling x axis into buckets over its size...
-
-	//normalization of histogram..
-	cv::normalize(histr,histr,0,histr.rows,cv::NORM_MINMAX,-1,cv::Mat());
-	cv::normalize(histb,histb,0,histb.rows,cv::NORM_MINMAX,-1,cv::Mat());
-	cv::normalize(histg,histg,0,histg.rows,cv::NORM_MINMAX,-1,cv::Mat());	
-	//now to plot histogram of each planes 
-	/*in the matrix we have intensity values of each buckets.Total no of buckets is 256;
-	To represent 256 buckets over x axis,we need to divide x axis in to these buckets, to do so we divide its length with buckets.
-	By doing so we obtain a correct scale of each buckets over x axis.And then we are going to plot values in each buckets over y axis..
-	each row in matrix represent bucket.so we are actually itrating over each buckets in a matrix..
-	|   |    |   | |   |    | |||||||  ||| |||  |||||||||!@$#%^$%%^%^&^%&^*&**(&$#%#%#$%$#^#$@^%$
-	||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||j|||||||||||||||||||||||||||||
-	*/
-	cv::Mat histogram_r(hist_w,hist_h,CV_8UC3); //matrix holding histogram(RED);
-	cv::Mat histogram_b(hist_w,hist_h,CV_8UC3); //matrix holding histogram(BLUE);
-	cv::Mat histogram_g(hist_w,hist_h,CV_8UC3); //matrix holding histogram(GREEN);  
-
-	float *arr=(float*)malloc(sizeof(float)*(256*3));
-	
-	
-	for(int loop=0;loop<255;loop++)
+BufferContainer::Histogram_container histogram(unsigned char *image,int h,int w)
 	{
-		arr[loop]=histr.at<float>(loop,0);
-		arr[loop+256]=histg.at<float>(loop,0);
-		arr[loop+(255*2)+1]=histb.at<float>(loop,0);
+	
+	cv::Mat src(w,h,CV_8UC4,image);
+	int histSize=255;
+	float hrange[]={0 , 255};
+	const float *range={hrange};
+
+		cv::Mat histg,histb,histr;
+	
+		std::vector<cv::Mat>channel;
+
+		split(src,channel); //splitting image into RBG planes;
+		//calculating histogram for each plane...
+	
+		cv::calcHist( &channel[0], 1, 0, cv::Mat(),histr, 1, &histSize,&range, true,false);
+		cv::calcHist( &channel[1], 1, 0, cv::Mat(),histb, 1, &histSize,&range, true,false);
+		cv::calcHist( &channel[2], 1, 0, cv::Mat(),histg, 1, &histSize,&range, true,false);
+
+		//int hist_w=512,hist_h=500;
+		//int hist_buckets=cvRound((double)(hist_w/histSize));//scaling x axis into buckets over its size...
+
+		//normalization of histogram..
+		cv::normalize(histr,histr,0,histr.rows,cv::NORM_MINMAX,-1,cv::Mat());
+		cv::normalize(histb,histb,0,histb.rows,cv::NORM_MINMAX,-1,cv::Mat());
+		cv::normalize(histg,histg,0,histg.rows,cv::NORM_MINMAX,-1,cv::Mat());	
+		//now to plot histogram of each planes 
+		/*in the matrix we have intensity values of each buckets.Total no of buckets is 256;
+		To represent 256 buckets over x axis,we need to divide x axis in to these buckets, to do so we divide its length with buckets.
+		By doing so we obtain a correct scale of each buckets over x axis.And then we are going to plot values in each buckets over y axis..
+		each row in matrix represent bucket.so we are actually itrating over each buckets in a matrix..
+		|   |    |   | |   |    | |||||||  ||| |||  |||||||||!@$#%^$%%^%^&^%&^*&**(&$#%#%#$%$#^#$@^%$
+		||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||j|||||||||||||||||||||||||||||
+		*/
+		/*cv::Mat histogram_r(hist_w,hist_h,CV_8UC3); //matrix holding histogram(RED);
+		cv::Mat histogram_b(hist_w,hist_h,CV_8UC3); //matrix holding histogram(BLUE);
+		cv::Mat histogram_g(hist_w,hist_h,CV_8UC3); //matrix holding histogram(GREEN);  
+		*/
+		
+		float *arr=(float*)malloc(sizeof(float)*((histSize+1)*3));
+	
+		//calculation of mean--frequency distrubution..data;
+		float mean[]={0.0,0.0,0.0};
+		float total_freq[]={0,0,0};
+		for(int loop=0;loop<255;loop++)
+		{
+			mean[0]+=(float)(loop+1)*histr.at<float>(loop,0);
+			total_freq[0]+=histr.at<float>(loop,0);
+			mean[1]+=(float)(loop+1)*histb.at<float>(loop,0);
+			total_freq[1]+=histb.at<float>(loop,0);
+			mean[2]+=(float)(loop+1)*histg.at<float>(loop,0);
+			total_freq[2]+=histg.at<float>(loop,0);
+		
+		}
+
+		mean[0]/=total_freq[0];
+		mean[1]/=total_freq[1];
+		mean[2]/=total_freq[2];
+
+	
+
+		for(int loop=0;loop<histSize;loop++)
+		{
+			arr[loop]=histr.at<float>(loop,0);
+			arr[loop+256]=histg.at<float>(loop,0);
+			arr[loop+(255*2)+1]=histb.at<float>(loop,0);
+		}
+
+		BufferContainer::Histogram_container bag;
+		bag.setParam(arr,mean);
+	
+		return bag; //return R-G-B array..
 	}
-	return arr; //return R-G-B array..
+	//histogram of  oriented gradients...
+void HOG()
+{
+
+
 }
+
 
 
 	}

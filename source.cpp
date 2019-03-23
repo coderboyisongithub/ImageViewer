@@ -40,7 +40,8 @@ ImGuiContext *maincontext;
 Dialoge_directory widget("Open");
 imageViewer im("viewer");
 
-Insight_ eye;
+
+
 LIST_LINKED lst;
 
 
@@ -49,10 +50,10 @@ unsigned char* openglTexBuff;
     unsigned char* tex_pixels = NULL;
 float POS[]=
 {
-	-1.0,-1.0,-1.0,
-	1.0,-1.0,-1.0,
-	1.0,1.0,-1.0,
-	-1.0,1.0,-1.0
+	-1.0,-1.0,-2.0,
+	1.0,-1.0,-2.0,
+	1.0,1.0,-2.0,
+	-1.0,1.0,-2.0
 };
 
 float texCoords[] = {
@@ -71,8 +72,11 @@ float scale_x=1.0,scale_y=1.0,translate_X=0.0,translate_Y=0.0,translate_Z=0.0;
 float val=0.0;
 float translation[]={
 		scale_x,0,0,0,
+
 		0,scale_y,0,0,
+
 		0,0,1,0,
+
 		translate_X,translate_Y,translate_Z,1
 	
 };
@@ -88,35 +92,51 @@ float rotation_arr[]=
 };
 
 
+
+
+
 void Display()
 {
 	
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	box.shader.setUniformat4x4("translation_matrix",translation);
-	box.shader.setUniformat4x4("rotation_matrix",rotation_arr);
-	box.shader.setUniform1f("col",1.0);
-	
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,TexID);
-	box.shader.setUniform1f("col",0.4);
-	box.shader.setUniform1i("a_texture",0);
-	
-	
+
+static float color=0.0;
+
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
 
 	
+	box.shader.setUniformat4x4("translation_matrix",translation);
+	box.shader.setUniformat4x4("rotation_matrix",rotation_arr);
 	
+	//box.shader.setUniform1f("col",glm::sin(t.getTicks()));
+
+	
+glActiveTexture(GL_TEXTURE0);
+glBindTexture(GL_TEXTURE_2D,TexID);
+box.shader.setUniform1f("col",1.0);
+box.shader.setUniform1i("a_texture",0);
+box.render();
+
+
+
+
 ImGui::PushStyleVar(ImGuiStyleVar_::ImGuiStyleVar_WindowRounding,0.0);
-	widget.render();
+
+widget.render();
 if(widget.anyUpdate()) //if list updated..then retrive list..
 	{
 	widget.getList(lst);
 	im.uploadList(lst);			
 	}
 else;	
+
 	im.render();
 
+
 	ImGui::PopStyleVar();
-	
+
 	/*
 	x=rcos$
 	y=rsin$
@@ -140,11 +160,14 @@ void EnginInit()
 	ImGuiIO &io=ImGui::GetIO();
 	
     int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+	//io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+	io.Fonts->AddFontFromFileTTF("RobotoCondensed-Bold.ttf",15.0,NULL);
+	
 	io.WantTextInput=true;
+	
 	vb=Vertex_Buffer(POS,4*3*sizeof(float),0,3,1);
 	ib=Index_buffer(index,3*2*sizeof(unsigned int),1);
-	sh=shader_processor("shader.glsl");
+	sh=shader_processor(std::string("shader.glsl"));
 	box=Object_2D(vb,ib,sh,GL_TRIANGLES);
 	
 	int h,w,c;
@@ -164,6 +187,7 @@ void EnginInit()
 	if(openglTexBuff!=NULL)stbi_image_free(openglTexBuff);
 
 	im.setupGPUmemory();
+
 	
 	//s.loadImage(std::string("C:\\Users\\Overclock\\Desktop\\star war ART.jpg"));
 }
@@ -179,6 +203,7 @@ void main()
 	
 
 	/*
+	Spidy..
 			-||-           -||-
             -||            -||-                          
             -\\-  ((  ))  -//-
@@ -199,7 +224,7 @@ void main()
 
 		abort();
 	}
-	Window=glfwCreateWindow(1024,786,"Window",NULL,NULL);
+	Window=glfwCreateWindow(1224,786,"Window",NULL,NULL);
 	if(!Window)
 	{
 		abort();

@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\area51\area51\DirectoryPhrasor.h" />
+    <ClInclude Include="BufferContainer.h" />
     <ClInclude Include="cvml.h" />
     <ClInclude Include="E:\imGui\Imgui includes\imconfig.h" />
     <ClInclude Include="E:\imGui\Imgui includes\imgui.h" />
@@ -175,10 +176,13 @@
     <ClInclude Include="E:\OpenGL abstraction Layer\shader_processor.h" />
     <ClInclude Include="E:\OpenGL abstraction Layer\vertexbuffer.h" />
     <ClInclude Include="DataMetric.h" />
+    <ClInclude Include="error_msg.h" />
+    <ClInclude Include="faceMash.h" />
     <ClInclude Include="imgViweh.h" />
     <ClInclude Include="InputPannel.h" />
     <ClInclude Include="LunchBox.h" />
     <ClInclude Include="Menubar.h" />
+    <ClInclude Include="Notifications.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h" />
@@ -188,9 +192,12 @@
     <ClInclude Include="Filters.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Widget_Filter_Blur.h" />
+    <ClInclude Include="Widget_Filter_PaintRed.h" />
     <ClInclude Include="Widget_Filter_Retro.h" />
     <ClInclude Include="Widget_Filter_Sharp.h" />
+    <ClInclude Include="Widget_Filter_Teselate.h" />
     <ClInclude Include="Widget_SliderInput.h" />
+    <ClInclude Include="windowContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="E:\imGui\Imgui includes\imgui.cpp" />
@@ -208,11 +215,21 @@
     <None Include="..\..\OpenGL\OpenGL\shader\shader.glsl" />
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="image.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\OpenBLAS.0.2.14.1\build\native\openblas.targets" Condition="Exists('..\packages\OpenBLAS.0.2.14.1\build\native\openblas.targets')" />
+    <Import Project="..\packages\armadillo-code.7.800.2\build\native\armadillo-code.targets" Condition="Exists('..\packages\armadillo-code.7.800.2\build\native\armadillo-code.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\OpenBLAS.0.2.14.1\build\native\openblas.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenBLAS.0.2.14.1\build\native\openblas.targets'))" />
+    <Error Condition="!Exists('..\packages\armadillo-code.7.800.2\build\native\armadillo-code.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\armadillo-code.7.800.2\build\native\armadillo-code.targets'))" />
+  </Target>
 </Project>
