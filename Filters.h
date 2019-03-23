@@ -295,9 +295,9 @@ laplace_g*=sharpness;//
 
 //Image substraction...
 
-channel[0]+=laplace_r;
-channel[1]+=laplace_g;
-channel[2]+=laplace_b;
+channel[0]-=laplace_r;
+channel[1]-=laplace_g;
+channel[2]-=laplace_b;
 
 cv::merge(channel,img);
 
