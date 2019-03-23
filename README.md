@@ -47,12 +47,13 @@ Here is example showing filter artify...
 This filter is specially for image containing face.For best result,face must be flooded with light.Poor lighting over face will ruin the effect.
 
 # utility
-<b>Image histogram</b>
+<b>Image histogram and Face-Detection</b>
 
 I also provide a saperate metric window to calculate and display histogram of R,G and B channels of image saperately..
 It gets updated whenever we apply filter in real-time..User can see the change occured in saperate channels of image.
+Also we have added a infobar to show number of face detected in image...right now it is not so good in performance...
+![image](https://user-images.githubusercontent.com/24197201/54867836-2495f880-4dad-11e9-930c-56c545b7fbc8.png)
 
-![histogram](https://user-images.githubusercontent.com/24197201/50737484-f5320f80-11f1-11e9-8606-d58ec6f3e180.gif)
 
 # gallery
 <b>1.The Sherlock</b>
