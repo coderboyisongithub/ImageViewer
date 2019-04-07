@@ -49,7 +49,7 @@ This filter is specially for image containing face.For best result,face must be 
 # utility
 <b>Image histogram and Face-Detection</b>
 
-I also provide a saperate metric window to calculate and display histogram of R,G and B channels of image saperately..
+I also provide a seperate metric window to calculate and display histogram of R,G and B channels of image saperately..
 It gets updated whenever we apply filter in real-time..User can see the change occured in saperate channels of image.
 Also we have added a infobar to show number of face detected in image...right now it is not so good in performance...
 ![image](https://user-images.githubusercontent.com/24197201/54867836-2495f880-4dad-11e9-930c-56c545b7fbc8.png)
