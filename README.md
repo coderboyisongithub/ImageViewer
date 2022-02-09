@@ -1,7 +1,7 @@
 # ImageViewer
 Image~Viewer and Editor.....
 
-		
+<i>this is under no further developement</i>	
 ![image](https://user-images.githubusercontent.com/24197201/52168580-e472ac00-2753-11e9-8429-034a688bb34e.png)
 
 
